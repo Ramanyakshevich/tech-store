@@ -1,14 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { createProductDto } from './dto/create-product.dto';
+import slugify from 'slugify';
 
 @Injectable()
 export class ProductService {
     constructor(private readonly prisma: PrismaService){}
 
-    create(createProductDto: any){
+    create(dto: createProductDto) {
+        const slug = slugify(dto.name, { lower: true });
+
         return this.prisma.product.create({
-            data: createProductDto
-        })
+            data: {
+                name: dto.name,
+                description: dto.description,
+                price: dto.price,
+                image: dto.image,
+                slug: slug
+            },
+        });
     }
 
     findAll(){
