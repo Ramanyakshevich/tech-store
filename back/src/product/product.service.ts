@@ -21,4 +21,6 @@ export class ProductService {
         })
     }
 
+    update(id: number, updateProductDto: any) { return `Update #${id}`; }
+    remove(id: number) { return `Remove #${id}`; }
 }
