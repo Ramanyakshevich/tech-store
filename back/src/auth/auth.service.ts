@@ -1,26 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { AuthDto } from './dto/auth.dto';
+import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { verify } from 'argon2';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private userService: UserService,
+    private jwt: JwtService,
+  ){}
+
+  async login(dto: AuthDto){
+    const user = await this.userService.findByEmail(dto.email)
+
+    if(!user) throw new NotFoundException('User not found')
+
+    const isValid = await verify(user.password, dto.password)
+
+    if(!isValid) throw new UnauthorizedException('Invalid password')
+
+    return {
+      accessToken: await this.jwt.signAsync({
+        id: user.id,
+        email: user.email,
+      })
+    }
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async register(dto: AuthDto){
+    // registaration
   }
 }
