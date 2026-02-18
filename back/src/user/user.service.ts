@@ -42,4 +42,33 @@ export class UserService {
       }
     })
   }
+
+  async addToken(userId: string, token: string, userAgent: string) {
+    return this.prisma.token.create({
+      data: {
+        token,
+        userId,
+        userAgent,
+        exp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
+      },
+    });
+  }
+
+  async getToken(token: string) {
+    return this.prisma.token.findUnique({
+      where: { token },
+    });
+  }
+
+  async removeToken(token: string) {
+    return this.prisma.token.delete({
+      where: { token },
+    });
+  }
+
+  async findById(id: string) {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
 }

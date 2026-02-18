@@ -14,9 +14,22 @@ model User{
     houseNumber String?
     zipCode     String?
 
+    tokens      Token[]
 
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
     @@map("users")
+}
+
+model Token{
+    token       String @unique
+    exp         DateTime
+
+    user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String
+
+    userAgent   String @default("unknown")
+
+    @@map("tokens")
 }
