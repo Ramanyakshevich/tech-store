@@ -5,6 +5,7 @@ model Product{
   description String?
   price       Int
   image       String
+  orderItems   OrderItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
