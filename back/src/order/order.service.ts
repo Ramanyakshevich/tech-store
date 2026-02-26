@@ -7,7 +7,7 @@ import { OrderDto } from './dto/order.dto';
 export class OrderService {
   constructor(private readonly prisma: PrismaService){}
 
-  async create(dto: OrderDto){
+  async create(dto: OrderDto, userId: string){
     const productIds = dto.items.map(item => item.productId)
 
     const products = await this.prisma.product.findMany({
@@ -38,7 +38,7 @@ export class OrderService {
 
     const order = await this.prisma.order.create({
       data: {
-        userId: dto.userId,
+        userId: userId,
         total: totalAmount,
         items:{
           create: orderItemsData,

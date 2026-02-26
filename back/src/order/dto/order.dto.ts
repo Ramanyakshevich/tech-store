@@ -10,9 +10,6 @@ class OrderItemDto{
 }
 
 export class OrderDto{
-    @IsString()
-    userId: string;
-
     @IsArray()
     @ValidateNested({ each: true })
     @ArrayMinSize(1, { message: 'Order must contain at least one item' })
