@@ -16,7 +16,8 @@ export class ProductService {
                 description: dto.description,
                 price: dto.price,
                 image: dto.image,
-                slug: slug
+                slug: dto.slug,
+                categoryId: dto.categoryId,
             },
         });
     }

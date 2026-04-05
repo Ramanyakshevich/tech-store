@@ -20,4 +20,8 @@ export class createProductDto{
     @IsString()
     @IsNotEmpty()
     image: string
+
+    @IsString()
+    @IsNotEmpty()
+    categoryId: string
 }
