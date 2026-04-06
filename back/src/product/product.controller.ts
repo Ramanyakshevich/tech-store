@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { createProductDto } from './dto/create-product.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
+import { GetAllProductDto } from './dto/get-all.product.dto';
 
 @Controller('product')
 export class ProductController {
@@ -14,8 +15,9 @@ export class ProductController {
   }
 
   @Get()
-  findAll(){
-    return this.productService.findAll()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  findAll(@Query() queryDto: GetAllProductDto){
+    return this.productService.findAll(queryDto)
   }
 
   @Get(':id')
